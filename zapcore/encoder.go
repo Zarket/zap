@@ -23,6 +23,8 @@ package zapcore
 import (
 	"encoding/json"
 	"io"
+	"reflect"
+	"runtime"
 	"time"
 
 	"go.uber.org/zap/buffer"
@@ -90,6 +92,12 @@ func (e *LevelEncoder) UnmarshalText(text []byte) error {
 		*e = LowercaseLevelEncoder
 	}
 	return nil
+}
+
+// MarshalText marshals the LevelEncoder to text. Note that the text view
+// contains the name of the function
+func (e LevelEncoder) MarshalText() (text []byte, err error) {
+	return []byte(runtime.FuncForPC(reflect.ValueOf(e).Pointer()).Name()), nil
 }
 
 // A TimeEncoder serializes a time.Time to a primitive type.
@@ -192,6 +200,12 @@ func (e *TimeEncoder) UnmarshalText(text []byte) error {
 	return nil
 }
 
+// MarshalText marshals the TimeEncoder to text. Note that the text view
+// contains the name of the function
+func (e TimeEncoder) MarshalText() (text []byte, err error) {
+	return []byte(runtime.FuncForPC(reflect.ValueOf(e).Pointer()).Name()), nil
+}
+
 // UnmarshalYAML unmarshals YAML to a TimeEncoder.
 // If value is an object with a "layout" field, it will be unmarshaled to  TimeEncoder with given layout.
 //
@@ -270,6 +284,12 @@ func (e *DurationEncoder) UnmarshalText(text []byte) error {
 	return nil
 }
 
+// MarshalText marshals the DurationEncoder to text. Note that the text view
+// contains the name of the function
+func (e DurationEncoder) MarshalText() (text []byte, err error) {
+	return []byte(runtime.FuncForPC(reflect.ValueOf(e).Pointer()).Name()), nil
+}
+
 // A CallerEncoder serializes an EntryCaller to a primitive type.
 //
 // This function must make exactly one call
@@ -302,6 +322,12 @@ func (e *CallerEncoder) UnmarshalText(text []byte) error {
 	return nil
 }
 
+// MarshalText marshals the CallerEncoder to text. Note that the text view
+// contains the name of the function
+func (e CallerEncoder) MarshalText() (text []byte, err error) {
+	return []byte(runtime.FuncForPC(reflect.ValueOf(e).Pointer()).Name()), nil
+}
+
 // A NameEncoder serializes a period-separated logger name to a primitive
 // type.
 //
@@ -324,6 +350,12 @@ func (e *NameEncoder) UnmarshalText(text []byte) error {
 		*e = FullNameEncoder
 	}
 	return nil
+}
+
+// MarshalText marshals the NameEncoder to text. Note that the text view
+// contains the name of the function
+func (e NameEncoder) MarshalText() (text []byte, err error) {
+	return []byte(runtime.FuncForPC(reflect.ValueOf(e).Pointer()).Name()), nil
 }
 
 // An EncoderConfig allows users to configure the concrete encoders supplied by
